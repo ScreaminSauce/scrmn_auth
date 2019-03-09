@@ -1,0 +1,30 @@
+{
+  "name": "@screaminsauce/scrmn_auth",
+  "version": "0.0.1",
+  "description": "A login module and application selector used for apps deployed with the screaminserver.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "manualtest": "node test/start.js | bunyan"
+  },
+  "author": "Jeff Claybaugh",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt": "^3.0.4",
+    "boom": "^7.3.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^2.1.0",
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "uuid": "^3.3.2",
+    "webpack": "^4.29.4"
+  },
+  "devDependencies": {
+    "@screaminsauce/screaminserver": "^0.0.1"
+  }
+}
