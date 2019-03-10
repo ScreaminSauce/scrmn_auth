@@ -38,6 +38,9 @@ class GuiBuilder {
                 },{
                     from: path.resolve(__dirname, 'static/application.html'),
                     to: outputFolder + '/application.html'
+                },{
+                    from: path.resolve(__dirname, 'static/domo.jpg'),
+                    to: outputFolder + '/domo.jpg'
                 }]),
                 new MiniCssExtractPlugin()
             ]

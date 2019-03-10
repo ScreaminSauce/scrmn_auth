@@ -1,5 +1,6 @@
 'use strict';
 const axios = require('axios');
+const myCss = require('./style/application.scss');
 
 class MainApp {
     constructor(){
