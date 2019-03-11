@@ -40,6 +40,7 @@ class MainApp {
                         
                         let appIconElem = document.createElement('img');
                         appIconElem.setAttribute('src', allAppInfo[app].icon);
+                        appIconElem.setAttribute('style', 'width: 144px; height:144px;')
 
                         let appNameElem = document.createElement('div');
                         appNameElem.setAttribute('style','text-align:center;');
