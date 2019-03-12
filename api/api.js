@@ -66,14 +66,14 @@ module.exports = (logger, basePath, dbConns)=>{
         },
         {
             method: "GET",
-            path: basePath + "/authorized-apps",
+            path: basePath + "/myUser",
             handler: (request, h)=>{
                 let db = dbConns.getConnection('auth');
                 let authLib = new AuthLib(logger, db);
                 return authLib.getUserInfo(request.auth.credentials.username)
                     .then((user)=>{
                         if (user){
-                            return user.authorizedApps;
+                            return user;
                         } else {
                             return null;
                         }

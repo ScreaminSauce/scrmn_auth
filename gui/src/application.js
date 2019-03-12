@@ -1,71 +1,77 @@
 'use strict';
 const axios = require('axios');
 const myCss = require('./style/application.scss');
+const Vue = require('vue/dist/vue');
+const appCmpnt = require('./components/app-cmpnt');
 
-class MainApp {
-    constructor(){
-        this._statusElem = document.querySelector("#statusMessage");
-        this._logoutElem = document.querySelector("#logoutButton");
-        this._appList = document.querySelector("#authAppContainer");
-        
-        this._registerListeners();
-        this.render();
-    }
-    _registerListeners(){
-        this._logoutElem.addEventListener("click", this._onLogoutClick = this._onLogoutClick.bind(this));
-    }
-    _onLogoutClick(){
-        axios.post(window.location.origin + "/api/auth/logout",{})
-        .then(()=>{
-            window.location = window.location.origin + "/public/auth/index.html"
-        })
-    }
-    render(){
-        let authApps;
-        let allAppInfo;
-
-        axios.get(window.location.origin + "/api/auth/authorized-apps")
-            .then((result)=>{
-                authApps = result.data;
-                
-                return axios.get(window.location.origin + "/api/reserved/appInfo")
+module.exports = new Vue({
+    el: "#app",
+    data: {
+        applications: []
+    },
+    mounted: function(){
+        this.fetchAuthAppInfo()
+            .then((authorizedApps)=>{
+                this.applications = authorizedApps;
             })
-            .then((result)=>{
-                allAppInfo = result.data;
-                
-                if(authApps && authApps.length > 0){
-                    authApps.forEach((app)=>{
-                        let appElem = document.createElement('div');
-                        appElem.setAttribute("style", "width:100px;height:135px;border: 2px solid black;border-radius:15px;margin:20px;")
-                        
-                        let appIconElem = document.createElement('img');
-                        appIconElem.setAttribute('src', allAppInfo[app].icon);
-                        appIconElem.setAttribute('style', 'width: 144px; height:144px;')
-
-                        let appNameElem = document.createElement('div');
-                        appNameElem.setAttribute('style','text-align:center;');
-                        appNameElem.textContent = allAppInfo[app].displayName;
-                    
-                        this._appList.appendChild(appElem);
-                        appElem.appendChild(appIconElem);
-                        appElem.appendChild(appNameElem);
-
-                        appElem.addEventListener('click', function(){
-                            console.log("loading app: " + app);
-                            console.log("Url: " + allAppInfo[app].urlSuffix)
-                        })
-                    })
-                }
-            })
-            .catch((error)=>{
-                if (error.response && error.response.data.statusCode === 401) {
+    },
+    methods: {
+        onLogoutButtonClicked: function(){
+            axios.post(window.location.origin + "/api/auth/logout",{})
+                .then(()=>{
                     window.location = window.location.origin + "/public/auth/index.html"
-                  } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                  }
-            })
-    }
-}
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+        },
+        fetchAuthAppInfo: function(){
+            let userInfo;
+            let appInfo;
+            return this.fetchUserInfo()
+                .then((result)=>{
+                    userInfo = result.data;
+                    return axios(window.location.origin + "/api/reserved/appInfo")
+                })
+                .then((result)=>{
+                    appInfo = result.data;
+                    let response = [];
+                    userInfo.authorizedApps.forEach((appName)=>{
+                        response.push(appInfo[appName]);
+                    })
+                    return response;
+                })
+        },
+        fetchUserInfo: function(){
+            return axios(window.location.origin + "/api/auth/myUser");
+        }
+    },
+    template: `
+    <div>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">Available Applications</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <!-- TODO: Self User Managment -->
+                </ul>
+                <div class="form-inline mt-2 mt-md-0">
+                    <button v-on:click="onLogoutButtonClicked" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+                </div>
+            </div>
+        </nav>
 
-module.exports = new MainApp();
+        <main role="main" class="container main-body">
+        <div class="card-deck">
+            <app-cmpnt v-for="(app, index) in applications"
+            :key="app.Name"
+            :app="app"
+            ></app-cmpnt>
+        </div>
+            
+        </main>
+    </div>
+    `
+});
