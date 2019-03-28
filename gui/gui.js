@@ -9,8 +9,8 @@ class GuiBuilder {
     constructor(outputFolder) {
         this._config = {
             entry: {
-                'scrmn_auth': path.resolve(__dirname, "src/index.js"),
-                'scrmn_auth_app': path.resolve(__dirname, "src/application.js")
+                'auth_login': path.resolve(__dirname, "src/index.js"),
+                'auth_apps': path.resolve(__dirname, "src/application.js")
             },
             output: {
                 filename: '[name].js',
@@ -39,8 +39,8 @@ class GuiBuilder {
                     from: path.resolve(__dirname, 'static/application.html'),
                     to: outputFolder + '/application.html'
                 },{
-                    from: path.resolve(__dirname, 'static/domo.jpg'),
-                    to: outputFolder + '/domo.jpg'
+                    from: path.resolve(__dirname, 'static/images/domo.jpg'),
+                    to: outputFolder + '/images/domo.jpg'
                 }]),
                 new MiniCssExtractPlugin()
             ]
@@ -48,11 +48,15 @@ class GuiBuilder {
     }
 
     getAppInfo(){
-        return {
-            urlSuffix: "/auth/applications",
-            icon: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M439.3 76H72.7C50.3 76 32 94 32 116v240c0 22 18.3 40 40.7 40h101.8v40h162.9v-40h101.8c22.4 0 40.5-18 40.5-40l.2-240c.1-22-18.2-40-40.6-40zm0 280H72.7V116h366.5v240z"/></svg>',
-            displayName: "App 1"
-        }
+        return [
+            {
+                urlPath: "/public/auth/usermgmt.html",
+                icon: '/public/auth/images/domo.jpg',
+                regName: "auth-user-management",
+                displayName: "User Management",
+                description: "Managing users of the ScreaminSauce Apps"
+            }
+        ]
     }
 
     build(logger) {

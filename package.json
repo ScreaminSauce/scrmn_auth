@@ -1,6 +1,6 @@
 {
   "name": "@screaminsauce/scrmn_auth",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A login module and application selector used for apps deployed with the screaminserver.",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,6 @@
     "webpack": "^4.29.4"
   },
   "devDependencies": {
-    "@screaminsauce/screaminserver": "0.0.4"
+    "@screaminsauce/screaminserver": "^1.0.0"
   }
 }

@@ -48,10 +48,7 @@ module.exports = (logger, basePath, dbConns)=>{
                         password: Joi.string().required()
                     }
                 },
-                auth: false,
-                description: 'Login to application call',
-                notes: 'Login method to system',
-                tags: ['api']
+                auth: false
             }
         },
         {
@@ -62,6 +59,9 @@ module.exports = (logger, basePath, dbConns)=>{
                 request.server.app.cache.drop(request.state['screaminCookie'].sid);
                 request.cookieAuth.clear();
                 return {};
+            },
+            config: {
+                auth: false
             }
         },
         {

@@ -3,6 +3,7 @@ const axios = require('axios');
 const myCss = require('./style/application.scss');
 const Vue = require('vue/dist/vue');
 const appCmpnt = require('./components/app-cmpnt');
+const _ = require('lodash');
 
 module.exports = new Vue({
     el: "#app",
@@ -31,15 +32,22 @@ module.exports = new Vue({
             return this.fetchUserInfo()
                 .then((result)=>{
                     userInfo = result.data;
+                    console.log("User: ", result.data);
                     return axios(window.location.origin + "/api/reserved/appInfo")
                 })
                 .then((result)=>{
                     appInfo = result.data;
+                    console.log("AppInfo: ", result.data);
                     let response = [];
                     userInfo.authorizedApps.forEach((appName)=>{
-                        response.push(appInfo[appName]);
+                        if (_.has(appInfo, appName)){
+                            response.push(appInfo[appName]);
+                        }  
                     })
                     return response;
+                })
+                .catch((err)=>{
+                    console.log("Error getting Auth App info: ", err);
                 })
         },
         fetchUserInfo: function(){
