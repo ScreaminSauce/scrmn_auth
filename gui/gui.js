@@ -3,14 +3,15 @@ const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 class GuiBuilder {
     constructor(outputFolder) {
         this._config = {
             entry: {
-                'auth_login': path.resolve(__dirname, "src/index.js"),
-                'auth_apps': path.resolve(__dirname, "src/application.js")
+                'auth_login': path.resolve(__dirname, "src/login.js"),
+                'auth_apps': path.resolve(__dirname, "src/application.js"),
+                'auth_usermgmt': path.resolve(__dirname, "src/usermgmt.js")
             },
             output: {
                 filename: '[name].js',
@@ -32,15 +33,11 @@ class GuiBuilder {
                 }]
             },
             plugins: [
+                new CleanWebpackPlugin(),
                 new CopyWebpackPlugin([{
-                    from: path.resolve(__dirname, 'static/index.html'),
-                    to: outputFolder + '/index.html'
-                },{
-                    from: path.resolve(__dirname, 'static/application.html'),
-                    to: outputFolder + '/application.html'
-                },{
-                    from: path.resolve(__dirname, 'static/images/domo.jpg'),
-                    to: outputFolder + '/images/domo.jpg'
+                    loglevel: 'debug',
+                    from: path.resolve(__dirname + '/static' ) + '/**',
+                    context: path.resolve(__dirname + '/static')
                 }]),
                 new MiniCssExtractPlugin()
             ]
@@ -51,7 +48,7 @@ class GuiBuilder {
         return [
             {
                 urlPath: "/public/auth/usermgmt.html",
-                icon: '/public/auth/images/domo.jpg',
+                icon: '/public/auth/images/batdomo.jpg',
                 regName: "auth-user-management",
                 displayName: "User Management",
                 description: "Managing users of the ScreaminSauce Apps"

@@ -1,85 +1,75 @@
 'use strict';
-const axios = require('axios');
-const myCss = require('./style/application.scss');
+const ClientLib = require('../lib/clientLib');
 const Vue = require('vue/dist/vue');
-const appCmpnt = require('./components/app-cmpnt');
-const _ = require('lodash');
+const myCss = require('./style/application.scss');
+const appCmpnt = require('./components/application/app-cmpnt');
 
 module.exports = new Vue({
     el: "#app",
-    data: {
-        applications: []
+    data: function(){
+        return {
+            applications: Array
+        }
     },
     mounted: function(){
-        this.fetchAuthAppInfo()
-            .then((authorizedApps)=>{
-                this.applications = authorizedApps;
-            })
+        this.initData();
     },
     methods: {
         onLogoutButtonClicked: function(){
-            axios.post(window.location.origin + "/api/auth/logout",{})
+            ClientLib.logout()
                 .then(()=>{
-                    window.location = window.location.origin + "/public/auth/index.html"
+                    window.location = ClientLib.AUTHENTICATION_URL;
                 })
                 .catch((err)=>{
                     console.log(err);
                 })
         },
-        fetchAuthAppInfo: function(){
+        initData: function(){
             let userInfo;
             let appInfo;
-            return this.fetchUserInfo()
+            
+            return ClientLib.getMyUser()
                 .then((result)=>{
-                    userInfo = result.data;
-                    console.log("User: ", result.data);
-                    return axios(window.location.origin + "/api/reserved/appInfo")
+                    userInfo = result;
+                    return ClientLib.getApplicationDefinitions();
                 })
                 .then((result)=>{
-                    appInfo = result.data;
-                    console.log("AppInfo: ", result.data);
                     let response = [];
+                    appInfo = result;
                     userInfo.authorizedApps.forEach((appName)=>{
-                        if (_.has(appInfo, appName)){
+                        if (appInfo[appName]){
                             response.push(appInfo[appName]);
                         }  
                     })
-                    return response;
+                    this.applications = response;
                 })
                 .catch((err)=>{
                     console.log("Error getting Auth App info: ", err);
                 })
-        },
-        fetchUserInfo: function(){
-            return axios(window.location.origin + "/api/auth/myUser");
         }
     },
     template: `
-    <div>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="#">Available Applications</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <!-- TODO: Self User Managment -->
-                </ul>
-                <div class="form-inline mt-2 mt-md-0">
-                    <button v-on:click="onLogoutButtonClicked" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+        <div>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
+                <a class="navbar-brand" href="#">Available Applications</a>
+                <div>
+                    <ul class="navbar-nav mr-auto">
+                        <!-- TODO: Self User Managment -->
+                    </ul>
+                    <div class="form-inline mt-2 mt-md-0">
+                        <button v-on:click="onLogoutButtonClicked" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <main role="main" class="container main-body">
-        <div class="card-deck">
-            <app-cmpnt v-for="(app, index) in applications"
-            :key="app.Name"
-            :app="app"
-            ></app-cmpnt>
+            <main role="main" class="container main-body">
+                <div class="card-deck">
+                    <app-cmpnt v-for="(app, index) in applications"
+                    :key="app.Name"
+                    :app="app"
+                    ></app-cmpnt>
+                </div>
+            </main>
         </div>
-            
-        </main>
-    </div>
     `
 });
