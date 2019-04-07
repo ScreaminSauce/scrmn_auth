@@ -3,6 +3,7 @@ const UserLib = require('./lib/userLib');
 const Joi = require('joi');
 const uuidv4 = require('uuid/v4');
 const Boom = require('boom');
+const _ = require('lodash');
 
 module.exports = (logger, basePath, dbConns)=>{
     return [
@@ -45,7 +46,9 @@ module.exports = (logger, basePath, dbConns)=>{
             path: basePath + "/logout",
             handler: (request, h)=>{
                 logger.info("Calling POST /logout");
-                request.server.app.cache.drop(request.state['screaminCookie'].sid);
+                if (_.has(request, "state.screaminCookie")){
+                    request.server.app.cache.drop(request.state['screaminCookie'].sid);
+                }
                 request.cookieAuth.clear();
                 return {};
             },
