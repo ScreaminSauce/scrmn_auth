@@ -9,29 +9,43 @@ module.exports = new Vue({
         return {
             username: "",
             password: "",
-            statusMessage: ""
+            errorMessage: ""
+        }
+    },
+    mounted: function(){
+        let params = new URLSearchParams(document.location.search.substring(1));
+        let errCode = params.get("errCode");
+        if (errCode){
+            switch(errCode){
+                case "1":
+                    this.errorMessage = "Account signed out. Please sign in"
+                    break;
+                case "2":
+                    this.errorMessage = "Account not authorized"
+            }
+            
         }
     },
     methods: {
         onLoginClicked: function(){
-            this.statusMessage = "";
+            this.errorMessage = "";
             ClientLib.login(this.username, this.password)
                 .then((result)=>{
                     if (result.authenticated){
                         window.location = ClientLib.APPLICATION_URL;
                     } else {
-                        this.statusMessage = "Bad username/password"
+                        this.errorMessage = "Bad username/password"
                     }
                 })
                 .catch((err)=>{
-                    this.statusMessage = "Unable to authenticate user";
+                    this.errorMessage = "Unable to authenticate user";
                     console.log(err);
                 })
         }
     },
     template: `
         <div class="form-signin">
-            <div>{{statusMessage}}</div>
+            <div v-if="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
 
             <img class="mb-4 logo-icon" src="/public/auth/images/domo.jpg" alt="" width="144" height="144">
             

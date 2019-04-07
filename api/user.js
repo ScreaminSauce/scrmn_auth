@@ -31,6 +31,13 @@ module.exports = (logger, basePath, dbConns) => {
             path: basePath + "/users",
             handler: (request, h) => {
                 return callUserLib("getAllUsers", null, null);
+            },
+            config: {
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
+                    }
+                }
             }
         },
         {
@@ -43,6 +50,13 @@ module.exports = (logger, basePath, dbConns) => {
                 validate: {
                     params: {
                         id: Joi.string().required()
+                    }
+                }
+            },
+            config: {
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
                     }
                 }
             }
@@ -59,6 +73,13 @@ module.exports = (logger, basePath, dbConns) => {
                         email: Joi.string().required()
                     }
                 }
+            },
+            config: {
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
+                    }
+                }
             }
         },
         {
@@ -71,6 +92,13 @@ module.exports = (logger, basePath, dbConns) => {
                 validate: {
                     params: {
                         name: Joi.string().required()
+                    }
+                }
+            },
+            config: {
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
                     }
                 }
             }
@@ -96,6 +124,11 @@ module.exports = (logger, basePath, dbConns) => {
                         password: Joi.string().required(),
                         email: Joi.string().required(),
                         authorizedApps: Joi.array().items(Joi.string().optional()).required()
+                    }
+                },
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
                     }
                 }
             }
@@ -125,6 +158,11 @@ module.exports = (logger, basePath, dbConns) => {
                         password: Joi.string().optional(),
                         authorizedApps: Joi.array().items(Joi.string().optional()).required()
                     }
+                },
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
+                    }
                 }
             }
         },
@@ -138,6 +176,11 @@ module.exports = (logger, basePath, dbConns) => {
                 validate: {
                     params: {
                         id: Joi.string().required()
+                    }
+                },
+                auth: {
+                    access: {
+                        scope: ["+auth-user-management"]
                     }
                 }
             }
