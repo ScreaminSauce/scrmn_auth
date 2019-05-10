@@ -3,13 +3,11 @@ const AuthModule = require("../")
 
 let server = new ScreaminServer({
     name: 'authTest',
-    type: 'both',
     options: {
         port: 3000,
         host: 'localhost'
     },
     modules: [AuthModule],
-    wwwDir: 'public',
     auth: {
         secret: 'ThisIsATestSecretThisIsATestSecretThisIsATestSecret',
         cookieName: "screaminCookie",

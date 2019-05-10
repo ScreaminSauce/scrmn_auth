@@ -67,7 +67,7 @@ class GuiBuilder {
                     logger.error(err);
                     reject(err);
                 } else {
-                    logger.info("Webpack build complete for module.")
+                    logger.info({module: "auth"}, "Webpack build complete for module.")
                     resolve();
                 }
             });
