@@ -25,7 +25,6 @@ module.exports = new Vue({
     mounted: function(){
         this.fetchUsers()
             .then((userList)=>{
-                console.log("Userlist: ", userList);
                 userList.forEach((usr)=>{
                     this.users.push(usr);
                 })
@@ -35,7 +34,6 @@ module.exports = new Vue({
                 Object.keys(appInfo).forEach((app)=>{
                     this.availableApps.push(appInfo[app]);
                 })
-                console.log(this.availableApps);
             })
     },
     methods: {

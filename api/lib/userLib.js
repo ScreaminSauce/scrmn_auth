@@ -4,9 +4,11 @@ const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 
 class UserLib {
-    constructor(logger, dbConn){
+    constructor(logger, dbConns){
         this._logger = logger;
-        this._usersCollection = dbConn.collection('users');
+        this._collectionName = "users";
+        this._dbClient = dbConns.getConnection('auth');
+        this._usersCollection = this._dbClient.collection(this._collectionName);
     }
 
     _generateBcryptPass(password){

@@ -1,5 +1,8 @@
+'use strict';
+require('dotenv').config();
 const ScreaminServer = require('@screaminsauce/screaminserver');
-const AuthModule = require("../")
+const AuthModuleApi = require("../").api;
+const AuthModuleGui = require("../").gui;
 
 let server = new ScreaminServer({
     name: 'authTest',
@@ -7,18 +10,24 @@ let server = new ScreaminServer({
         port: 3000,
         host: 'localhost'
     },
-    modules: [AuthModule],
+    modules: [AuthModuleApi, AuthModuleGui],
     auth: {
         secret: 'ThisIsATestSecretThisIsATestSecretThisIsATestSecret',
-        cookieName: "screaminCookie",
-        redirectTo: false,
+        cookieName: process.env.COOKIE_AUTH_NAME,
         isSecure: false
-    }
+    },
+    defaultGuiRoute: "/public/auth/login.html"
 });
 
-process.on('unhandledRejection', (err)=>{
+
+process.on('unhandledRejection', (err) => {
     console.log(err);
     process.exit(1);
 })
 
-server.startup();;
+server.startup()
+    .catch((err) => {
+        console.log(err);
+        console.log("Error starting system");
+        process.exit(1);
+    })

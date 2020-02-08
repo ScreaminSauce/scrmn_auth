@@ -1,36 +1,35 @@
 {
-  "name": "@screaminsauce/scrmn_auth",
-  "version": "1.1.4",
-  "description": "A login module and application selector used for apps deployed with the screaminserver.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "manualtest": "node test/start.js | bunyan"
-  },
-  "author": "Jeff Claybaugh",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "bcrypt": "^3.0.4",
-    "boom": "^7.3.0",
-    "bootstrap": "^4.3.1",
-    "clean-webpack-plugin": "^2.0.1",
-    "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^2.1.1",
-    "joi": "^14.3.1",
-    "jquery": "^3.3.1",
-    "lodash": "^4.17.11",
-    "mini-css-extract-plugin": "^0.5.0",
-    "mongodb": "^3.2.2",
-    "node-sass": "^4.11.0",
-    "popper.js": "^1.14.7",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "uuid": "^3.3.2",
-    "vue": "^2.6.8",
-    "webpack": "^4.29.4"
-  },
-  "devDependencies": {
-    "@screaminsauce/screaminserver": "^1.0.0"
-  }
+    "name": "@screaminsauce/scrmn_auth",
+    "version": "2.0.0",
+    "description": "A login module and application selector used for apps deployed with the screaminserver.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "manualtest": "node test/start.js | bunyan"
+    },
+    "author": "Jeff Claybaugh",
+    "license": "ISC",
+    "dependencies": {
+        "@hapi/boom": "^8.0.0",
+        "@hapi/joi": "^17.0.0",
+        "axios": "^0.18.1",
+        "bcrypt": "^3.0.8",
+        "bootstrap": "^4.4.1",
+        "clean-webpack-plugin": "^2.0.2",
+        "copy-webpack-plugin": "^5.0.0",
+        "css-loader": "^2.1.1",
+        "lodash": "^4.17.15",
+        "mini-css-extract-plugin": "^0.5.0",
+        "mongodb": "^3.5.2",
+        "node-sass": "^4.13.1",
+        "sass-loader": "^7.3.1",
+        "style-loader": "^0.23.1",
+        "uuid": "^3.4.0",
+        "vue": "^2.6.11",
+        "webpack": "^4.41.5"
+    },
+    "devDependencies": {
+        "@screaminsauce/screaminserver": "^3.0.8",
+        "dotenv": "^8.0.0"
+    }
 }

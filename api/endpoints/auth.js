@@ -1,5 +1,5 @@
 'use strict';
-const UserLib = require('./lib/userLib');
+const UserLib = require('../lib/userLib');
 const Joi = require('joi');
 const uuidv4 = require('uuid/v4');
 const Boom = require('boom');
@@ -12,7 +12,7 @@ module.exports = (logger, basePath, dbConns)=>{
             path: basePath + "/authenticate",
             handler: (request, h) => {
                 let sid = uuidv4();
-                let userLib = new UserLib(logger, dbConns.getConnection("auth"));
+                let userLib = new UserLib(logger, dbConns);
 
                 return userLib.authenticate(request.payload.username, request.payload.password)
                     .then((result)=>{
@@ -46,8 +46,8 @@ module.exports = (logger, basePath, dbConns)=>{
             path: basePath + "/logout",
             handler: (request, h)=>{
                 logger.info("Calling POST /logout");
-                if (_.has(request, "state.screaminCookie")){
-                    request.server.app.cache.drop(request.state['screaminCookie'].sid);
+                if (_.has(request, "state." + process.env.COOKIE_AUTH_NAME)){
+                    request.server.app.cache.drop(request.state[process.env.COOKIE_AUTH_NAME].sid);
                 }
                 request.cookieAuth.clear();
                 return {};
@@ -55,6 +55,6 @@ module.exports = (logger, basePath, dbConns)=>{
             config: {
                 auth: false
             }
-        }
+        },
     ]
 }

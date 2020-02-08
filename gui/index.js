@@ -75,4 +75,8 @@ class GuiBuilder {
     }
 }
 
-module.exports = GuiBuilder;
+module.exports = {
+    name: "auth",
+    type: "gui",
+    gui: GuiBuilder
+};

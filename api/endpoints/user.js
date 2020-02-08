@@ -1,12 +1,11 @@
 'use strict';
 const Joi = require('joi');
 const Boom = require('boom');
-const UserLib = require('./lib/userLib');
+const UserLib = require('../lib/userLib');
 
 module.exports = (logger, basePath, dbConns) => {
     let callUserLib = function(methodName, onError, ...args){
-        let db = dbConns.getConnection('auth');
-        let uLib = new UserLib(logger, db);
+        let uLib = new UserLib(logger, dbConns);
         return uLib[methodName].call(uLib, ...args)
             .catch((err)=>{
                 if (onError){

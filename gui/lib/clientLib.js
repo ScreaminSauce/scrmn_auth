@@ -4,17 +4,21 @@ const originBase = window.location.origin;
 const _ = require('lodash');
 
 class ClientLib {
-    static handleError(err){
-        if (_.has(err, "response.status")){
-            if (err.response.status == 401){
+    static handleError(err) {
+        if (err.details) {
+            console.log(err.details);
+        }
+        if (_.has(err, "response.status")) {
+            if (err.response.status == 401) {
                 //User has been logged out, or trying to get in without authentication
-                window.location = ClientLib.AUTHENTICATION_URL + "?errCode=1";
-            } else if (err.response.status == 403){
+                window.location = ClientLib.AUTHENTICATION_URL + "?code=1";
+            } else if (err.response.status == 403) {
                 //User trying to do something naughty (Forbidden)... may as well send them to the login page.
-                window.location = ClientLib.AUTHENTICATION_URL + "?errCode=2";
-            } else {
-                return Promise.reject(err);
+                window.location = ClientLib.AUTHENTICATION_URL + "?code=2";
             }
+        }
+        if (_.has(err, "response.data")) {
+            return Promise.reject(err.response.data);
         } else {
             return Promise.reject(err);
         }
@@ -57,9 +61,6 @@ class ClientLib {
             .then((result)=>{
                 return result.data;
             }, ClientLib.handleError)
-            .catch((err)=>{
-                return Promise.reject(err.response.data);
-            })
     }
 
     static deleteUser(id){
@@ -74,9 +75,6 @@ class ClientLib {
             .then((result)=>{
                 return result.data;
             }, ClientLib.handleError)
-            .catch((err)=>{
-                return Promise.reject(err.response.data);
-            })
     }
 }   
 
