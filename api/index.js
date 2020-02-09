@@ -3,6 +3,9 @@ const _ = require('lodash');
 const UserApi = require('./endpoints/user');
 const AuthApi = require('./endpoints/auth');
 
+console.log(process.env.MONGO_URI_AUTH);
+console.log(process.env.MONGO_DATABASE_AUTH);
+
 module.exports = {
     name: "auth",
     type: "api",
@@ -13,8 +16,8 @@ module.exports = {
         {
             name: "auth",
             type: "mongo",
-            url: process.env.MONGO_URI,
-            dbName: process.env.MONGO_DATABASE
+            url: process.env.MONGO_URI_AUTH,
+            dbName: process.env.MONGO_DATABASE_AUTH
         }
     ]
 }
