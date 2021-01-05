@@ -12,7 +12,7 @@
     "dependencies": {
         "@hapi/boom": "^8.0.0",
         "@hapi/joi": "^17.0.0",
-        "axios": "^0.18.1",
+        "axios": "^0.21.1",
         "bcrypt": "^3.0.8",
         "bootstrap": "^4.4.1",
         "clean-webpack-plugin": "^2.0.2",
