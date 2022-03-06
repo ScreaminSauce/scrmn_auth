@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 class GuiBuilder {
     constructor(outputFolder) {
@@ -16,16 +16,9 @@ class GuiBuilder {
             output: {
                 filename: '[name].js',
                 path: path.resolve(outputFolder),
-                sourceMapFilename: '[name].map'
+                sourceMapFilename: '[file].map[query]'
             },
             devtool: "source-map",
-            node: {
-                fs: 'empty',
-                net: 'empty',
-                tls: 'empty',
-                dns: 'empty',
-                global: true
-            },
             module: {
                 rules: [{
                     test: /\.s[c|a]ss$/,
@@ -34,11 +27,14 @@ class GuiBuilder {
             },
             plugins: [
                 new CleanWebpackPlugin(),
-                new CopyWebpackPlugin([{
-                    loglevel: 'debug',
-                    from: path.resolve(__dirname + '/static' ) + '/**',
-                    context: path.resolve(__dirname + '/static')
-                }]),
+                new CopyWebpackPlugin({
+                    patterns: [
+                        {
+                            from: path.resolve(__dirname + '/static' ) + '/**',
+                            context: path.resolve(__dirname + '/static')
+                        }
+                    ]
+                }),
                 new MiniCssExtractPlugin()
             ]
         }
@@ -59,15 +55,18 @@ class GuiBuilder {
     build(logger) {
         return new Promise((resolve, reject) => {
             webpack([this._config], (err, stats) => {
-                if (err || stats.hasErrors()) {
+                if (stats && stats.hasErrors()){
                     let info = stats.toJson();
                     info.errors.forEach((sError) => {
                         logger.error(JSON.stringify(sError, null, 2));
                     })
                     logger.error(err);
+                }
+                if (err) {
+                    logger.error(err);
                     reject(err);
                 } else {
-                    logger.info({module: "auth"}, "Webpack build complete for module.")
+                    logger.info({module: "manualtest"}, "Webpack build complete for module.")
                     resolve();
                 }
             });

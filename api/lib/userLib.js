@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const ObjectID = require('mongodb').ObjectID;
+const {ObjectId} = require('mongodb');
 const bcrypt = require('bcrypt');
 
 class UserLib {
@@ -17,12 +17,12 @@ class UserLib {
         return new Promise((resolve, reject)=>{
             bcrypt.genSalt(saltRounds, function(err, salt) {
                 if (err){
-                    this._logger.error({error: err, user: newUser}, "Error salting new user password.");
+                    this._logger.error({err, user: newUser}, "Error salting new user password.");
                     return reject(err);
                 }
                 bcrypt.hash(password, salt, function(err, hash) {
                     if (err){
-                        this._logger.error({error: err, user: newUser}, "Error generating new user hash.");
+                        this._logger.error({err, user: newUser}, "Error generating new user hash.");
                         return reject(err);
                     }
                     return resolve(hash);
@@ -58,7 +58,7 @@ class UserLib {
     getAllUsers(){
         return this._usersCollection.find({}, { projection: {password : 0} }).toArray()
             .catch((err)=>{
-                logger.error({error: err}, "Error retrieving all users");
+                logger.error({err}, "Error retrieving all users");
                 throw err;
             })
     }
@@ -66,15 +66,15 @@ class UserLib {
     getUserByName(name){
         return this._usersCollection.findOne({username: name})
             .catch((err)=>{
-                logger.error({error: err}, "Error retrieving user by name");
+                logger.error({err}, "Error retrieving user by name");
                 throw err;
             })
     }
 
     getUserById(id){
-        return this._usersCollection.findOne({_id: ObjectID(id)}, { projection: {password : 0} })
+        return this._usersCollection.findOne({_id: ObjectId(id)}, { projection: {password : 0} })
             .catch((err)=>{
-                logger.error({error: err}, "Error retrieving user by id");
+                logger.error({err}, "Error retrieving user by id");
                 throw err;
             })
     }
@@ -82,7 +82,7 @@ class UserLib {
     getUserByEmail(email){
         return this._usersCollection.findOne({email: email}, { projection: {password : 0} })
             .catch((err)=>{
-                logger.error({error: err}, "Error retrieving user by email");
+                logger.error({err}, "Error retrieving user by email");
                 throw err;
             })
     }
@@ -116,7 +116,7 @@ class UserLib {
         
         return prom
             .then(()=>{
-                return this._usersCollection.findOneAndUpdate({"_id":ObjectID(id)}, ops, {returnOriginal: false})
+                return this._usersCollection.findOneAndUpdate({"_id":ObjectId(id)}, ops, { returnDocument: 'after' })
             })
             .then((result)=>{
                 if (! _.isEmpty(result)){
@@ -128,7 +128,7 @@ class UserLib {
     }
 
     deleteUser(id){
-        return this._usersCollection.deleteOne({"_id":ObjectID(id)});
+        return this._usersCollection.deleteOne({"_id":ObjectId(id)});
     }
 
     createUser(userInfo){
@@ -146,7 +146,7 @@ class UserLib {
                 return this._usersCollection.insertOne(newUser);
             })    
             .then((result)=>{
-                return result.ops[0];
+                return this.getUserById(result.insertedId);
             })
     }
 }

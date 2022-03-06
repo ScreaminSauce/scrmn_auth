@@ -24,7 +24,7 @@ module.exports = new Vue({
     },
     mounted: function(){
         this.fetchUsers()
-            .then((userList)=>{
+            .then((userList =[])=>{
                 userList.forEach((usr)=>{
                     this.users.push(usr);
                 })

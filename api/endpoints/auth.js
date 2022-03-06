@@ -1,8 +1,8 @@
 'use strict';
 const UserLib = require('../lib/userLib');
 const Joi = require('joi');
-const uuidv4 = require('uuid/v4');
-const Boom = require('boom');
+const uuidv4 = require('uuid').v4;
+const Boom = require('@hapi/boom');
 const _ = require('lodash');
 
 module.exports = (logger, basePath, dbConns)=>{
@@ -27,7 +27,7 @@ module.exports = (logger, basePath, dbConns)=>{
                         }
                     })
                     .catch((err)=>{
-                        logger.error({error: err}, "Error running authenticate.");
+                        logger.error({err}, "Error running authenticate.");
                         return Boom.internal('Internal MongoDB error', err);
                     });
             },

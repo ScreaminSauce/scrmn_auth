@@ -1,7 +1,11 @@
 {
     "name": "@screaminsauce/scrmn_auth",
-    "version": "2.0.2",
+    "version": "3.0.0",
     "description": "A login module and application selector used for apps deployed with the screaminserver.",
+    "engines": {
+        "node": ">16.0.0",
+        "npm": ">6.0.0"
+    },
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,26 +14,26 @@
     "author": "Jeff Claybaugh",
     "license": "ISC",
     "dependencies": {
-        "@hapi/boom": "^8.0.0",
-        "@hapi/joi": "^17.0.0",
-        "axios": "^0.18.1",
-        "bcrypt": "^3.0.8",
+        "@hapi/boom": "^9.0.0",
+        "axios": "^0.26.0",
+        "bcrypt": "^5.0.1",
         "bootstrap": "^4.4.1",
-        "clean-webpack-plugin": "^2.0.2",
-        "copy-webpack-plugin": "^5.0.0",
-        "css-loader": "^2.1.1",
-        "lodash": "^4.17.15",
-        "mini-css-extract-plugin": "^0.5.0",
-        "mongodb": "^3.5.2",
-        "node-sass": "^4.13.1",
-        "sass-loader": "^7.3.1",
-        "style-loader": "^0.23.1",
-        "uuid": "^3.4.0",
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^10.2.4",
+        "css-loader": "^6.7.0",
+        "joi": "^17.0.6",
+        "lodash": "^4.17.21",
+        "mini-css-extract-plugin": "^2.6.0",
+        "mongodb": "^4.4.1",
+        "node-sass": "^7.0.1",
+        "sass-loader": "^12.6.0",
+        "style-loader": "^3.3.1",
+        "uuid": "^8.3.2",
         "vue": "^2.6.11",
-        "webpack": "^4.41.5"
+        "webpack": "^5.70.0"
     },
     "devDependencies": {
-        "@screaminsauce/screaminserver": "^3.0.8",
+        "@screaminsauce/screaminserver": "5.0.2",
         "dotenv": "^8.0.0"
     }
 }

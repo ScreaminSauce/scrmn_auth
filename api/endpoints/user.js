@@ -1,6 +1,6 @@
 'use strict';
 const Joi = require('joi');
-const Boom = require('boom');
+const Boom = require('@hapi/boom');
 const UserLib = require('../lib/userLib');
 
 module.exports = (logger, basePath, dbConns) => {
@@ -11,8 +11,7 @@ module.exports = (logger, basePath, dbConns) => {
                 if (onError){
                     return onError(err);
                 } else {
-                    console.log(err);
-                    logger.error({error:err, methodName: methodName});
+                    logger.error({ err, methodName: methodName});
                     Boom.internal("Error calling userLib." + methodName);
                 }
             })
@@ -110,6 +109,7 @@ module.exports = (logger, basePath, dbConns) => {
                     if (err && err.message == "ERR_DUP_USER"){
                         return Boom.conflict("Username already exists");
                     } else {
+                        logger.error({err, methodName: 'createUser'});
                         return Boom.internal("Error creating user")
                     }
                 }
@@ -140,6 +140,7 @@ module.exports = (logger, basePath, dbConns) => {
                     if (err && err.message == "ERR_DUP_USER"){
                         return Boom.conflict("Username already exists");
                     } else {
+                        logger.error({ err, methodName: 'updateUser'});
                         return Boom.internal("Error updating user.")
                     }
                 }
